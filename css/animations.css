@@ -1,0 +1,72 @@
+/* =============================================================================
+   JPJ Fotografie — animations.css
+   Custom cursor, GSAP initial states, clip-path helpers, reduced-motion.
+   ========================================================================== */
+
+/* --- Custom cursor (desktop only) ---------------------------------------- */
+#cursor {
+  position: fixed;
+  top: 0; left: 0;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--ink);
+  border: 1px solid transparent;
+  pointer-events: none;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transform: translate(-50%, -50%);
+  mix-blend-mode: difference;
+}
+#cursor .cursor__label {
+  font-family: var(--sans);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink);
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  white-space: nowrap;
+}
+#cursor.is-hovering { background: transparent; border-color: var(--ink); }
+#cursor.is-hovering .cursor__label { opacity: 1; }
+
+/* Cursor only on real pointer + wide screens */
+@media (min-width: 1024px) and (pointer: fine) {
+  #cursor { display: flex; }
+  html.has-cursor,
+  html.has-cursor a,
+  html.has-cursor button,
+  html.has-cursor .work-item,
+  html.has-cursor .category-card,
+  html.has-cursor .gallery__cell,
+  html.has-cursor img { cursor: none; }
+}
+
+/* --- GSAP initial states (avoid FOUC before JS runs) --------------------- */
+/* These are applied only when JS + motion are active via .js-anim on <html>. */
+.js-anim [data-hero-word] { opacity: 0; }
+.js-anim .hero__divider { transform: scaleY(0); transform-origin: top; }
+.js-anim .hero__scroll { opacity: 0; }
+.js-anim .reveal { clip-path: inset(0 100% 0 0); }
+.js-anim .fade-up { opacity: 0; transform: translateY(20px); }
+.js-anim .slide-in { opacity: 0; transform: translateX(-20px); }
+
+/* page transition overlay starts visible, JS fades it out */
+.js-anim .page-transition { opacity: 1; }
+
+/* --- Reduced motion: show everything, no animation ----------------------- */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+  #cursor { display: none !important; }
+  html.has-cursor, html.has-cursor * { cursor: auto !important; }
+  [data-hero-word],
+  .hero__divider,
+  .hero__scroll,
+  .reveal,
+  .fade-up,
+  .slide-in { opacity: 1 !important; transform: none !important; clip-path: none !important; }
+  .page-transition { display: none !important; }
+}
