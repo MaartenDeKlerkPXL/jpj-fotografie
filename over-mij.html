@@ -7,6 +7,27 @@
   <title>Over mij — JPJ Fotografie</title>
   <meta name="description" content="Jacques van JPJ Fotografie – vakfotograaf geboren in Zuid-Limburg. Persoonlijk, gepassioneerd en altijd op zoek naar het echte moment.">
 
+  <link rel="canonical" href="https://www.jpjfotografie.nl/over-mij.html">
+
+  <link rel="icon" href="favicon.ico" sizes="32x32">
+  <link rel="icon" type="image/svg+xml" href="images/favicon/favicon.svg">
+  <link rel="apple-touch-icon" href="images/favicon/apple-touch-icon.png">
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="JPJ Fotografie">
+  <meta property="og:locale" content="nl_NL">
+  <meta property="og:url" content="https://www.jpjfotografie.nl/over-mij.html">
+  <meta property="og:title" content="Over mij — JPJ Fotografie">
+  <meta property="og:description" content="Jacques van JPJ Fotografie – vakfotograaf geboren in Zuid-Limburg. Persoonlijk, gepassioneerd en altijd op zoek naar het echte moment.">
+  <meta property="og:image" content="https://www.jpjfotografie.nl/og-image.jpg">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="JPJ Fotografie — Vakfotograaf in Zuid-Limburg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Over mij — JPJ Fotografie">
+  <meta name="twitter:description" content="Jacques van JPJ Fotografie – vakfotograaf geboren in Zuid-Limburg. Persoonlijk, gepassioneerd en altijd op zoek naar het echte moment.">
+  <meta name="twitter:image" content="https://www.jpjfotografie.nl/og-image.jpg">
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,400;1,500&family=Inter:wght@400;500&display=swap" rel="stylesheet">
@@ -59,39 +80,29 @@
   </div>
 
   <main>
-    <!-- TOP PHOTO -->
-    <section class="about-hero">
-      <img class="about-hero__photo" id="aboutHeroPhoto" src="" alt="Jacques Pieters, fotograaf bij JPJ Fotografie" loading="eager">
-      <div class="container">
-        <h1 class="about-hero__name">Jacques Pieters</h1>
-        <div class="about-hero__rule"></div>
+    <!-- SPLIT: foto links, naam + verhaal rechts -->
+    <section class="about-split">
+      <div class="about-split__media">
+        <picture>
+          <source type="image/webp">
+          <img class="about-split__photo" id="aboutHeroPhoto" src="" alt="Jacques Pieters, fotograaf bij JPJ Fotografie" sizes="(max-width: 767px) 100vw, 50vw" loading="eager">
+        </picture>
       </div>
-    </section>
-
-    <!-- CONTENT -->
-    <section class="section container about-content">
-      <div class="about-bio" style="position:relative;">
+      <div class="about-split__text">
         <p class="eyebrow">Mijn verhaal</p>
-        <div class="about-bio__inner" id="bioText"></div>
-      </div>
+        <h1 class="about-split__name" id="aboutName">Jacques Pieters</h1>
+        <div class="about-split__rule"></div>
+        <div class="about-bio" id="bioWrap">
+          <div class="about-bio__inner" id="bioText"></div>
+        </div>
 
-      <div class="about-services">
-        <p class="eyebrow">Ik fotografeer</p>
-        <ul class="about-services__list">
-          <li class="slide-in">Portretfoto's</li>
-          <li class="slide-in">Architectuurfoto's</li>
-          <li class="slide-in">Bruiloften</li>
-          <li class="slide-in">Zwangerschapsfoto's</li>
-          <li class="slide-in">Newborn-shoots</li>
-          <li class="slide-in">Baby-shoots &amp; Cake Smash</li>
-          <li class="slide-in">Familie-shoots</li>
-          <li class="slide-in">Bedrijfsfotografie</li>
-          <li class="slide-in">Dieren-shoots</li>
-          <li class="slide-in">Communie &amp; Kinderfeesten</li>
-          <li class="slide-in">Sport &amp; Evenementen</li>
-        </ul>
-        <div class="about-services__cta">
-          <a href="contact.html" class="arrow-link">Wilt u meer weten? Neem contact op <span class="arrow">→</span></a>
+        <!-- Diensten — ondergeschikt aan het verhaal, in dezelfde kolom -->
+        <div class="about-split__services">
+          <p class="eyebrow">Ik fotografeer</p>
+          <ul class="about-services__list" id="servicesList"></ul>
+          <div class="about-services__cta">
+            <a href="contact.html" class="arrow-link">Wilt u meer weten? Neem contact op <span class="arrow">→</span></a>
+          </div>
         </div>
       </div>
     </section>
@@ -102,20 +113,14 @@
       <span class="footer__left">© 2025 JPJ Fotografie</span>
       <span class="footer__center">jpjfotografie.nl</span>
       <span class="footer__right">
-        <a id="footerInsta" href="#" aria-label="Instagram" target="_blank" rel="noopener">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" xmlns="http://www.w3.org/2000/svg">
-            <rect x="3" y="3" width="18" height="18" rx="5"/>
-            <circle cx="12" cy="12" r="4"/>
-            <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none"/>
-          </svg>
-        </a>
         <a id="footerMail" href="#">info@jpjfotografie.nl</a>
       </span>
+      <p class="footer__credit">Gemaakt door <a href="https://portfolio-maartendeklerk.netlify.app/" target="_blank" rel="noopener noreferrer">Maarten de Klerk</a></p>
     </div>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.15.0/ScrollTrigger.min.js"></script>
   <script src="js/data.js"></script>
   <script src="js/sanity.js"></script>
   <script src="js/over-mij.js"></script>
