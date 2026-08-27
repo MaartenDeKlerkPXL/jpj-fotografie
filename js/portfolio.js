@@ -13,14 +13,39 @@
     { label: 'Bruiloften', slug: 'bruiloften' },
     { label: 'Zakelijk', slug: 'zakelijk', sub: ['bedrijfsfotografie', 'architectuur'] },
     { label: 'Dieren', slug: 'dieren' },
-    { label: 'Sport & Events', slug: 'sport-events' }
+    { label: 'Sport & Events', slug: 'sport-events', sub: ['sport', 'events'] }
   ];
 
   function catName(slug) { return window.DataAPI.categoryName(slug); }
 
+  // Elke ?cat=-variant is eigen, indexeerbare content — canonical/OG moeten dus
+  // meebewegen met de querystring, anders lijken alle categorieën duplicaten
+  // van elkaar voor zoekmachines.
+  function updateMetaForCategory(naam) {
+    const url = window.location.origin + window.location.pathname + window.location.search;
+    const title = naam + ' — JPJ Fotografie';
+    const desc = 'Portfolio van JPJ Fotografie — ' + naam + '. Bekijk het werk in deze categorie.';
+
+    const canonical = document.getElementById('canonical');
+    if (canonical) canonical.href = url;
+
+    const setContent = function (id, val) {
+      const el = document.getElementById(id);
+      if (el) el.setAttribute('content', val);
+    };
+    setContent('ogUrl', url);
+    setContent('ogTitle', title);
+    setContent('ogDescription', desc);
+    setContent('twitterTitle', title);
+    setContent('twitterDescription', desc);
+    const metaDesc = document.getElementById('metaDescription');
+    if (metaDesc) metaDesc.setAttribute('content', desc);
+  }
+
   function renderSubnav(activeSlug) {
     const scroll = document.getElementById('subnavScroll');
-    if (!scroll) return;
+    const subnavEl = document.getElementById('subnav');
+    if (!scroll || !subnavEl) return;
 
     SUBNAV.forEach(function (item, i) {
       if (i > 0) {
@@ -28,8 +53,6 @@
         sep.className = 'subnav__sep';
         scroll.appendChild(sep);
       }
-      const wrap = document.createElement('div');
-      wrap.className = 'subnav__item';
 
       const link = document.createElement(item.sub ? 'button' : 'a');
       link.className = 'subnav__link';
@@ -42,28 +65,42 @@
         (activeSlug === null && item.slug === null);
       if (isActive) link.classList.add('is-active');
 
-      wrap.appendChild(link);
+      scroll.appendChild(link);
 
       if (item.sub) {
+        // Dropdown buiten de horizontaal-scrollende container plaatsen, anders
+        // knipt de overflow-x (die overflow-y → auto forceert) het paneel af.
         const dd = document.createElement('div');
         dd.className = 'subnav__dropdown';
         dd.innerHTML = item.sub.map(function (s) {
           return '<a href="portfolio-categorie.html?cat=' + s + '">' + catName(s) + '</a>';
         }).join('');
-        wrap.appendChild(dd);
+        subnavEl.appendChild(dd);
+        dd.addEventListener('click', function (e) { e.stopPropagation(); });
 
         link.addEventListener('click', function (e) {
           e.preventDefault();
           e.stopPropagation();
           const open = dd.classList.contains('is-open');
           closeAllDropdowns();
-          if (!open) openDropdown(dd);
+          if (!open) { positionDropdown(dd, link, subnavEl); openDropdown(dd); }
         });
       }
-      scroll.appendChild(wrap);
     });
 
     document.addEventListener('click', closeAllDropdowns);
+    window.addEventListener('resize', closeAllDropdowns);
+  }
+
+  function positionDropdown(dd, link, subnavEl) {
+    const lr = link.getBoundingClientRect();
+    const sr = subnavEl.getBoundingClientRect();
+    let left = lr.left - sr.left;
+    // binnen het scherm houden
+    const maxLeft = subnavEl.clientWidth - dd.offsetWidth - 8;
+    if (maxLeft > 8) left = Math.min(left, maxLeft);
+    dd.style.left = Math.max(8, left) + 'px';
+    dd.style.top = sr.height + 'px';
   }
 
   function openDropdown(dd) {
@@ -106,7 +143,7 @@
       }
       return (
         '<a class="category-card" data-area="' + slug + '" href="portfolio-categorie.html?cat=' + slug + '">' +
-          '<img class="category-card__img" src="' + c.cover + '" alt="' + c.naam + '" loading="lazy">' +
+          window.buildPicture(c.cover, c.naam, { className: 'category-card__img', sizes: '(max-width: 1023px) 100vw, 33vw' }) +
           '<span class="category-card__overlay"></span>' +
           '<span class="category-card__body">' +
             '<span class="category-card__name">' + c.naam + '</span>' +
@@ -118,15 +155,51 @@
   }
 
   /* --- Editorial galerij (portfolio-categorie.html) ---------------------- */
-  const PATTERNS = [
-    { row: 'row-a', cells: ['ar-16-7'] },
-    { row: 'row-b', cells: ['ar-3-2', 'ar-3-2'] },
-    { row: 'row-c', cells: ['ar-2-3', 'ar-3-2'] },
-    { row: 'row-d', cells: ['ar-4-3', 'ar-4-3', 'ar-4-3'] },
-    { row: 'row-e', cells: ['ar-3-2', 'ar-2-3'] }
-  ];
-
   let galleryPhotos = [];
+
+  // Bouwt rijen die de oriëntatie van elke foto respecteren:
+  // staande foto's komen in staande cellen (ar-2-3 / ar-3-4), liggende in
+  // liggende cellen (ar-3-2 / ar-4-3 / ar-16-7). Combinaties worden gevarieerd
+  // zodat het editorial oogt; nooit 3 staande foto's naast elkaar.
+  function buildRows(photos) {
+    const n = photos.length;
+    const o = function (k) { return k < n ? (photos[k].o === 'p' ? 'p' : 'l') : null; };
+    const rows = [];
+    let i = 0;
+    let v = 0; // variatieteller voor liggende rijen
+
+    while (i < n) {
+      const a = o(i), b = o(i + 1), c = o(i + 2);
+
+      if (a === 'p') {
+        if (b === 'p') {
+          rows.push({ row: 'row-pp', cells: ['ar-3-4', 'ar-3-4'] });   // 2 staand naast elkaar
+        } else if (b === 'l') {
+          rows.push({ row: 'row-c', cells: ['ar-2-3', 'ar-3-2'] });    // staand + liggend
+        } else {
+          rows.push({ row: 'row-p1', cells: ['ar-2-3'] });             // enkele staande, gecentreerd
+        }
+      } else { // liggend
+        if (b === 'l' && c === 'l') {
+          rows.push(v % 2 === 0
+            ? { row: 'row-d', cells: ['ar-4-3', 'ar-4-3', 'ar-4-3'] }  // 3 liggend
+            : { row: 'row-b', cells: ['ar-3-2', 'ar-3-2'] });          // 2 liggend
+          v++;
+        } else if (b === 'l') {
+          rows.push(v % 3 === 0
+            ? { row: 'row-a', cells: ['ar-16-7'] }                     // af en toe breed beeld
+            : { row: 'row-b', cells: ['ar-3-2', 'ar-3-2'] });
+          v++;
+        } else if (b === 'p') {
+          rows.push({ row: 'row-e', cells: ['ar-3-2', 'ar-2-3'] });    // liggend + staand
+        } else {
+          rows.push({ row: 'row-a', cells: ['ar-16-7'] });            // enkele liggende
+        }
+      }
+      i += rows[rows.length - 1].cells.length;
+    }
+    return rows;
+  }
 
   async function renderGallery() {
     const gallery = document.getElementById('gallery');
@@ -141,6 +214,7 @@
     if (titleEl) titleEl.textContent = naam;
     document.title = naam + ' — JPJ Fotografie';
     renderSubnav(cat);
+    updateMetaForCategory(naam);
 
     // skeletons
     gallery.innerHTML =
@@ -162,33 +236,23 @@
       return;
     }
 
-    // bouw rijen volgens patrooncyclus
+    // bouw rijen die de oriëntatie van elke foto respecteren
+    const rows = buildRows(galleryPhotos);
     let html = '';
     let idx = 0;       // globale foto-index (voor lightbox)
-    let p = 0;         // patroon-index
-    let remaining = galleryPhotos.length;
 
-    while (remaining > 0) {
-      let pat = PATTERNS[p % PATTERNS.length];
-      let count = pat.cells.length;
-      // laatste, onvolledige rij: nette fallback
-      if (count > remaining) {
-        pat = { row: remaining === 1 ? 'row-a' : 'row-d', cells: [] };
-        for (let k = 0; k < remaining; k++) pat.cells.push(remaining === 1 ? 'ar-16-7' : 'ar-4-3');
-        count = remaining;
-      }
+    rows.forEach(function (pat) {
       html += '<div class="gallery__row ' + pat.row + '">';
-      for (let c = 0; c < count; c++) {
+      pat.cells.forEach(function (cell) {
         const ph = galleryPhotos[idx];
-        html += '<figure class="gallery__cell ' + pat.cells[c] + '" data-index="' + idx + '">' +
-                  '<img class="reveal" src="' + ph.src + '" alt="' + (ph.alt || '') + '" loading="lazy">' +
+        if (!ph) return;
+        html += '<figure class="gallery__cell ' + cell + '" data-index="' + idx + '">' +
+                  window.buildPicture(ph.src, ph.alt, { className: 'reveal', sizes: '(max-width: 767px) 100vw, (max-width: 1023px) 50vw, 33vw' }) +
                 '</figure>';
         idx++;
-      }
+      });
       html += '</div>';
-      remaining -= count;
-      p++;
-    }
+    });
     gallery.innerHTML = html;
 
     gallery.querySelectorAll('.gallery__cell').forEach(function (cell) {
@@ -208,8 +272,7 @@
     const ph = galleryPhotos[lbIndex];
     const img = document.getElementById('lbImg');
     const counter = document.getElementById('lbCounter');
-    img.src = ph.src;
-    img.alt = ph.alt || '';
+    window.fillPicture(img, ph.src, ph.alt || '');
     counter.textContent = (lbIndex + 1) + ' / ' + galleryPhotos.length;
     if (window.gsap && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       gsap.fromTo(img, { scale: 0.95, opacity: 0.6 }, { scale: 1, opacity: 1, duration: 0.35, ease: 'power2.out' });
@@ -259,6 +322,17 @@
     }, { passive: true });
   }
 
+  async function renderOverviewTeksten() {
+    try {
+      const t = await window.DataAPI.siteTeksten();
+      if (!t) return;
+      const titel = document.getElementById('pfTitel');
+      const sub = document.getElementById('pfSub');
+      if (titel && t.portfolioTitel) { titel.textContent = t.portfolioTitel; document.title = t.portfolioTitel + ' — JPJ Fotografie'; }
+      if (sub && t.portfolioSubtitel) sub.textContent = t.portfolioSubtitel;
+    } catch (e) {}
+  }
+
   /* --- Init -------------------------------------------------------------- */
   document.addEventListener('DOMContentLoaded', function () {
     const onOverview = !!document.getElementById('cardsGrid');
@@ -266,6 +340,7 @@
 
     if (onOverview) {
       renderSubnav(null);
+      renderOverviewTeksten();
       renderCards().then(function () { document.dispatchEvent(new Event('jpj:ready')); });
     }
     if (onCategory) {

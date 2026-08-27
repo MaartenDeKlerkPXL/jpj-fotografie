@@ -1,17 +1,20 @@
 /* =============================================================================
    sanity.js — Sanity fetch-helper + image-URL builder
    -----------------------------------------------------------------------------
-   Vul PROJECT_ID in met jouw Sanity project-ID (te vinden op sanity.io/manage).
-   Zolang PROJECT_ID op 'YOUR_PROJECT_ID' staat, gebruikt de site automatisch de
-   lokale foto's uit js/data.js, zodat alles direct werkt zonder backend.
+   BEWUSTE KEUZE VOOR V1: Sanity is niet aangesloten. De site draait volledig
+   op de lokale data in js/data.js — dat is geen tijdelijke noodval, maar de
+   vaste databron voor deze versie. PROJECT_ID blijft op 'YOUR_PROJECT_ID' staan
+   zodat SANITY_READY altijd false is en geen enkele pagina een live-koppeling
+   verwacht. Wil je in een latere versie alsnog op Sanity overstappen: vul
+   PROJECT_ID hieronder én in sanity/sanity.config.js in, en volg de stappen in
+   de README.
    ========================================================================== */
 
-// TODO: Vervang YOUR_PROJECT_ID door jouw Sanity project-ID (sanity.io/manage)
 const PROJECT_ID = 'YOUR_PROJECT_ID';
 const DATASET    = 'production';
 const API_VER    = '2023-05-03';
 
-// Staat Sanity klaar? Zo niet → lokale fallback (js/data.js)
+// Voor v1 altijd false (zie toelichting hierboven) — geen halve Sanity-koppeling.
 const SANITY_READY = PROJECT_ID && PROJECT_ID !== 'YOUR_PROJECT_ID';
 
 async function sanityFetch(query) {
@@ -54,12 +57,20 @@ const QUERIES = {
   }`,
 
   photosByCategory: (catSlug) => `*[_type == "foto" && (categorie->slug.current == "${catSlug}" || categorie->parentCategorie->slug.current == "${catSlug}")] | order(volgorde asc) {
-    _id, afbeelding, altTekst
+    _id, afbeelding, altTekst,
+    "orientatie": select(afbeelding.asset->metadata.dimensions.aspectRatio < 1 => "p", "l")
   }`,
 
-  overMij: `*[_type == "overMij"][0] { portretFoto, citaat, biografie }`,
+  overMij: `*[_type == "overMij"][0] { portretFoto, naam, citaat, biografie, diensten }`,
 
-  instellingen: `*[_type == "instellingen"][0] { tagline, contactFoto, email, telefoon, instagram, regio }`
+  instellingen: `*[_type == "instellingen"][0] { tagline, contactFoto, email, regio }`,
+
+  siteTeksten: `*[_type == "siteTeksten"][0] {
+    heroTitel, heroSubtitel, aboutEyebrow,
+    portfolioTitel, portfolioSubtitel,
+    ctaTitel, ctaSubtitel, ctaKnop,
+    contactTitel, contactSubtitel
+  }`
 };
 
 /* -----------------------------------------------------------------------------
@@ -77,6 +88,69 @@ function srcFrom(obj, width, quality) {
   return '';
 }
 
+function escAttr(s) {
+  return String(s == null ? '' : s)
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+// Elke lokale foto (images/...) heeft naast het origineel (max. 1800px breed)
+// ook -480/-800/-1200-varianten in .jpg én .webp (zie compress-images.sh).
+// Geeft null terug voor niet-lokale (Sanity-CDN) paden — die hebben hun eigen
+// transform-URL's en gebruiken deze responsive opzet niet.
+function pictureVariants(src) {
+  if (!src || typeof src !== 'string' || !src.startsWith('images/')) return null;
+  const dot = src.lastIndexOf('.');
+  const base = src.slice(0, dot);
+  const widths = [480, 800, 1200];
+  return {
+    jpgSrcset: widths.map(function (w) { return base + '-' + w + '.jpg ' + w + 'w'; })
+      .concat([src + ' 1800w']).join(', '),
+    webpSrcset: widths.map(function (w) { return base + '-' + w + '.webp ' + w + 'w'; })
+      .concat([base + '.webp 1800w']).join(', ')
+  };
+}
+
+// Bouwt <picture>-markup (WebP-source + responsive <img>) voor gebruik in
+// innerHTML-templates (work-grid, categorie-kaarten, galerij).
+function buildPicture(src, alt, opts) {
+  opts = opts || {};
+  const sizes = opts.sizes || '100vw';
+  const cls = opts.className ? ' class="' + opts.className + '"' : '';
+  const loading = opts.loading || 'lazy';
+  const fetchpriority = opts.fetchpriority ? ' fetchpriority="' + opts.fetchpriority + '"' : '';
+  const altAttr = escAttr(alt);
+  const variants = pictureVariants(src);
+
+  if (!variants) {
+    return '<img' + cls + ' src="' + (src || '') + '" alt="' + altAttr + '" loading="' + loading + '"' + fetchpriority + '>';
+  }
+
+  return (
+    '<picture>' +
+      '<source type="image/webp" srcset="' + variants.webpSrcset + '" sizes="' + sizes + '">' +
+      '<img' + cls + ' src="' + src + '" srcset="' + variants.jpgSrcset + '" sizes="' + sizes + '" alt="' + altAttr + '" loading="' + loading + '"' + fetchpriority + '>' +
+    '</picture>'
+  );
+}
+
+// Vult een bestaand <img> (optioneel binnen een statische <picture>-wrapper
+// met een lege <source>) met responsive src/srcset — voor plekken waar de
+// HTML al vaststaat (hero, about-foto, lightbox) i.p.v. via innerHTML gebouwd wordt.
+function fillPicture(imgEl, src, alt) {
+  if (!imgEl || !src) return;
+  imgEl.src = src;
+  if (alt !== undefined) imgEl.alt = alt; // undefined = alt ongemoeid laten (blijft de vaste HTML-alt)
+
+  const variants = pictureVariants(src);
+  if (!variants) { imgEl.removeAttribute('srcset'); return; }
+
+  imgEl.srcset = variants.jpgSrcset;
+  const source = imgEl.parentElement && imgEl.parentElement.tagName === 'PICTURE'
+    ? imgEl.parentElement.querySelector('source[type="image/webp"]')
+    : null;
+  if (source) source.srcset = variants.webpSrcset;
+}
+
 const DataAPI = {
   ready: SANITY_READY,
 
@@ -87,7 +161,17 @@ const DataAPI = {
 
   async overMij() {
     if (!SANITY_READY) return window.JPJ_DATA.overMij;
-    return await sanityFetch(QUERIES.overMij);
+    const res = await sanityFetch(QUERIES.overMij);
+    // val per veld terug op lokale data wanneer een veld in Sanity nog leeg is
+    const local = window.JPJ_DATA.overMij;
+    return Object.assign({}, local, res || {});
+  },
+
+  async siteTeksten() {
+    const local = window.JPJ_DATA.siteTeksten;
+    if (!SANITY_READY) return local;
+    const res = await sanityFetch(QUERIES.siteTeksten);
+    return Object.assign({}, local, res || {});
   },
 
   async featured() {
@@ -141,7 +225,7 @@ const DataAPI = {
   async photosByCategory(slug) {
     if (!SANITY_READY) {
       return window.JPJ_DATA.photosByCategory(slug).map(function (ph) {
-        return { _id: ph._id, src: ph.src, alt: ph.alt };
+        return { _id: ph._id, src: ph.src, alt: ph.alt, o: ph.o || 'l' };
       });
     }
     const res = await sanityFetch(QUERIES.photosByCategory(slug));
@@ -149,7 +233,8 @@ const DataAPI = {
       return {
         _id: f._id,
         src: imageUrl(f.afbeelding && f.afbeelding.asset && f.afbeelding.asset._ref, 1400, 88),
-        alt: f.altTekst
+        alt: f.altTekst,
+        o: f.orientatie === 'p' ? 'p' : 'l'
       };
     });
   },
@@ -162,3 +247,5 @@ const DataAPI = {
 
 window.DataAPI = DataAPI;
 window.srcFrom = srcFrom;
+window.buildPicture = buildPicture;
+window.fillPicture = fillPicture;
