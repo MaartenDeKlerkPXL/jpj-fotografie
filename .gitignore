@@ -1,0 +1,15 @@
+# IDE
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Sanity Studio (geïnstalleerd met npm install, niet nodig in de repo)
+sanity/node_modules/
+sanity/dist/
+
+# Lokale env/geheimen (mocht dat later gebruikt worden)
+.env
+.env.local
