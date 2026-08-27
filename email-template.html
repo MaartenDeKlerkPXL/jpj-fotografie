@@ -1,0 +1,126 @@
+<!--
+  email-template.html — EmailJS-template voor het contactformulier van JPJ Fotografie
+  ============================================================================
+  GEBRUIK:
+  1. Ga naar dashboard.emailjs.com → Email Templates → jouw template.
+  2. Schakel de editor naar "Code editor" (</> icoon rechtsboven in de editor).
+  3. Plak de HTML hieronder (alles vanaf <!DOCTYPE ...> t/m </html>) in het
+     Content-veld. Zet het onderwerp (Subject) op bv.:
+       Nieuw contactverzoek van {{name}} — JPJ Fotografie
+  4. Zet "To email" op het adres waar dit moet binnenkomen (bv. info@jpjfotografie.nl).
+  5. Zet "Reply To" op {{email}} zodat je in je mailclient direct op "Beantwoorden"
+     kunt klikken en het antwoord naar de klant gaat, niet terug naar EmailJS.
+
+  VARIABELEN — deze moeten exact zo heten (komen uit js/contact.js):
+  {{name}}, {{email}}, {{type_shoot}}, {{locatie}}, {{datum}}, {{message}}
+  ============================================================================
+-->
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nieuw contactverzoek — JPJ Fotografie</title>
+</head>
+<body style="margin:0; padding:0; background-color:#F6F4F1; font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;">
+
+  <!-- Preheader (onzichtbare preview-tekst in de inbox) -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0;">
+    Nieuw bericht via het contactformulier op jpjfotografie.nl van {{name}}.
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F6F4F1; padding:32px 16px;">
+    <tr>
+      <td align="center">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="width:600px; max-width:100%; background-color:#FFFFFF; border:1px solid rgba(17,17,17,0.10);">
+
+          <!-- Header -->
+          <tr>
+            <td style="background-color:#111111; padding:28px 32px;">
+              <span style="font-family:Georgia,'Times New Roman',serif; font-size:22px; color:#FFFFFF; letter-spacing:-0.01em;">JPJ Fotografie</span>
+              <br>
+              <span style="font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif; font-size:12px; letter-spacing:0.12em; text-transform:uppercase; color:#C8861A;">Nieuw contactverzoek</span>
+            </td>
+          </tr>
+
+          <!-- Intro -->
+          <tr>
+            <td style="padding:32px 32px 8px 32px;">
+              <p style="margin:0; font-size:15px; line-height:1.6; color:#111111;">
+                Er is een nieuw bericht binnengekomen via het contactformulier op jpjfotografie.nl.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Gegevens -->
+          <tr>
+            <td style="padding:16px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;">
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); width:130px; vertical-align:top; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Naam</td>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); font-size:15px; color:#111111;">{{name}}</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); vertical-align:top; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">E-mail</td>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); font-size:15px;">
+                    <a href="mailto:{{email}}" style="color:#111111; text-decoration:underline; text-underline-offset:2px;">{{email}}</a>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); vertical-align:top; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Type fotoshoot</td>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); font-size:15px; color:#111111;">{{type_shoot}}</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); vertical-align:top; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Locatie</td>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); font-size:15px; color:#111111;">{{locatie}}</td>
+                </tr>
+                <tr>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); border-bottom:1px solid rgba(17,17,17,0.10); vertical-align:top; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Datum</td>
+                  <td style="padding:12px 0; border-top:1px solid rgba(17,17,17,0.10); border-bottom:1px solid rgba(17,17,17,0.10); font-size:15px; color:#111111;">{{datum}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Bericht -->
+          <tr>
+            <td style="padding:8px 32px 32px 32px;">
+              <p style="margin:0 0 8px 0; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#6B6560;">Bericht</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background-color:#F6F4F1; border-left:3px solid #C8861A;">
+                <tr>
+                  <td style="padding:16px 20px; font-size:15px; line-height:1.7; color:#111111; white-space:pre-line;">{{message}}</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- CTA -->
+          <tr>
+            <td style="padding:0 32px 36px 32px;" align="center">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td style="background-color:#111111;">
+                    <a href="mailto:{{email}}" style="display:inline-block; padding:14px 28px; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; color:#FFFFFF; text-decoration:none;">Beantwoord {{name}} &rarr;</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="padding:20px 32px; background-color:#F6F4F1; border-top:1px solid rgba(17,17,17,0.10);">
+              <p style="margin:0; font-size:12px; line-height:1.6; color:#6B6560;">
+                Automatisch verzonden vanaf het contactformulier op
+                <a href="https://www.jpjfotografie.nl" style="color:#6B6560;">jpjfotografie.nl</a>.
+              </p>
+            </td>
+          </tr>
+
+        </table>
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

@@ -12,9 +12,7 @@
     try {
       const s = await window.DataAPI.instellingen();
       if (!s) return;
-      const insta = document.getElementById('footerInsta');
       const mail = document.getElementById('footerMail');
-      if (insta && s.instagram) insta.href = s.instagram;
       if (mail && s.email) { mail.href = 'mailto:' + s.email; mail.textContent = s.email; }
       const heroTag = document.getElementById('heroTagline');
       if (heroTag && s.tagline) heroTag.textContent = s.tagline;
@@ -25,9 +23,13 @@
   function initNavScroll() {
     const nav = document.getElementById('nav');
     if (!nav) return;
+    // Alleen op de homepage: rechter navtekst wit zolang de nav over de
+    // (transparante) hero ligt; daarna zwart op de witte balk.
+    const hero = document.querySelector('.hero');
     function onScroll() {
-      if (window.scrollY > 80) nav.classList.add('is-scrolled');
-      else nav.classList.remove('is-scrolled');
+      const scrolled = window.scrollY > 80;
+      nav.classList.toggle('is-scrolled', scrolled);
+      if (hero) nav.classList.toggle('nav--hero', !scrolled);
     }
     onScroll();
     window.addEventListener('scroll', onScroll, { passive: true });

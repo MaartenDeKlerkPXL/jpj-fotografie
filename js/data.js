@@ -28,7 +28,9 @@ window.JPJ_DATA = (function () {
     { slug: 'communie',         naam: 'Communie',           parent: 'portret-communie' },
     { slug: 'kinderfeesten',    naam: 'Kinderfeesten',      parent: 'portret-communie' },
     { slug: 'bedrijfsfotografie', naam: 'Bedrijfsfotografie', parent: 'zakelijk' },
-    { slug: 'architectuur',     naam: 'Architectuur',       parent: 'zakelijk' }
+    { slug: 'architectuur',     naam: 'Architectuur',       parent: 'zakelijk' },
+    { slug: 'sport',            naam: 'Sport',              parent: 'sport-events' },
+    { slug: 'events',           naam: 'Events',             parent: 'sport-events' }
   ];
 
   // helper: bouw een foto-object
@@ -93,22 +95,22 @@ window.JPJ_DATA = (function () {
     p('bedrijf/1027.jpg', 'zakelijk', 'bedrijfsfotografie', 'Professionals in gesprek tijdens het werk', 'l'),
 
     // Sport & Events — Evenementen
-    p('evenementen/Drummer-1.jpg', 'sport-events', null, 'Drummer in actie tijdens een live optreden', 'l'),
-    p('evenementen/Zangeres-1.jpg', 'sport-events', null, 'Zangeres op het podium', 'p'),
-    p('evenementen/Antony-Claesy-Trio-gitarist-1.jpg', 'sport-events', null, 'Gitarist tijdens een muziekoptreden', 'l'),
-    p('evenementen/Dixie-001-1.jpg', 'sport-events', null, 'Dixieland-band live op een evenement', 'l'),
-    p('evenementen/Carnaval-001-1.jpg', 'sport-events', null, 'Kleurrijke carnavalsviering in Limburg', 'l'),
-    p('evenementen/Carnaval-002-1.jpg', 'sport-events', null, 'Carnavalsoptocht vol sfeer', 'l'),
-    p('evenementen/Carnaval-003-1.jpg', 'sport-events', null, 'Feestvierders tijdens carnaval', 'l'),
-    p('evenementen/48A0979-scaled.jpg', 'sport-events', null, 'Sfeervol evenementmoment', 'p'),
+    p('evenementen/Drummer-1.jpg', 'sport-events', 'events', 'Drummer in actie tijdens een live optreden', 'l'),
+    p('evenementen/Zangeres-1.jpg', 'sport-events', 'events', 'Zangeres op het podium', 'p'),
+    p('evenementen/Antony-Claesy-Trio-gitarist-1.jpg', 'sport-events', 'events', 'Gitarist tijdens een muziekoptreden', 'l'),
+    p('evenementen/Dixie-001-1.jpg', 'sport-events', 'events', 'Dixieland-band live op een evenement', 'l'),
+    p('evenementen/Carnaval-001-1.jpg', 'sport-events', 'events', 'Kleurrijke carnavalsviering in Limburg', 'l'),
+    p('evenementen/Carnaval-002-1.jpg', 'sport-events', 'events', 'Carnavalsoptocht vol sfeer', 'l'),
+    p('evenementen/Carnaval-003-1.jpg', 'sport-events', 'events', 'Feestvierders tijdens carnaval', 'l'),
+    p('evenementen/48A0979-scaled.jpg', 'sport-events', 'events', 'Sfeervol evenementmoment', 'p'),
 
     // Sport & Events — Sport
-    p('sport/De-coachen.jpg', 'sport-events', null, 'Coach geeft aanwijzingen langs de lijn', 'l'),
-    p('sport/Roda-Jc-001.jpg', 'sport-events', null, 'Voetbalwedstrijd vastgelegd in actie', 'l'),
-    p('sport/Kart-in-actie.jpg', 'sport-events', null, 'Kart scheurt door de bocht', 'l'),
-    p('sport/Kart-start.jpg', 'sport-events', null, 'Spanning bij de start van de kartrace', 'l'),
-    p('sport/Monteurs-aan-het-werk.jpg', 'sport-events', null, 'Monteurs aan het werk in de pitstraat', 'l'),
-    p('sport/448A3963-scaled.jpg', 'sport-events', null, 'Dynamisch sportmoment vastgelegd', 'p')
+    p('sport/De-coachen.jpg', 'sport-events', 'sport', 'Coach geeft aanwijzingen langs de lijn', 'l'),
+    p('sport/Roda-Jc-001.jpg', 'sport-events', 'sport', 'Voetbalwedstrijd vastgelegd in actie', 'l'),
+    p('sport/Kart-in-actie.jpg', 'sport-events', 'sport', 'Kart scheurt door de bocht', 'l'),
+    p('sport/Kart-start.jpg', 'sport-events', 'sport', 'Spanning bij de start van de kartrace', 'l'),
+    p('sport/Monteurs-aan-het-werk.jpg', 'sport-events', 'sport', 'Monteurs aan het werk in de pitstraat', 'l'),
+    p('sport/448A3963-scaled.jpg', 'sport-events', 'sport', 'Dynamisch sportmoment vastgelegd', 'p')
   ];
 
   // --- Uitgelichte foto's voor de homepage (Werk-grid) --------------------
@@ -137,32 +139,58 @@ window.JPJ_DATA = (function () {
   const covers = {
     'familie-gezin':    'images/babyborn/1047.jpg',
     'portret-communie': 'images/home/Oude-man-voor-de-website-768x1024.jpg',
-    'bruiloften':       'images/bruiloften/48A1304-scaled.jpg',
-    'zakelijk':         'images/architectuur/Industrie-007-scaled.jpg',
+    'bruiloften':       'images/bruiloften/0323-scaled.jpeg',
+    'zakelijk':         'images/architectuur/1009.jpg',
     'dieren':           null, // Nog geen foto's aangeleverd — toont nette lege staat
-    'sport-events':     'images/sport/De-coachen.jpg'
+    'sport-events':     'images/sport/Kart-in-actie.jpg'
   };
 
   // --- Site-instellingen ---------------------------------------------------
   const instellingen = {
     tagline: 'Vakfotograaf in Zuid-Limburg',
     email: 'info@jpjfotografie.nl',
-    telefoon: '+31 6 12 34 56 78',
-    instagram: 'https://www.instagram.com/jpjfotografie',
     regio: 'Zuid-Limburg',
     contactFoto: 'images/bruiloften/0191-scaled.jpeg'
   };
 
   // --- Over mij ------------------------------------------------------------
   const overMij = {
-    portretFoto: 'images/home/jackjanssen-1820x2048.jpg', // TODO: vervang door echte foto van Jacques
+    portretFoto: 'images/home/jackjanssen-1820x2048.jpg', // echte portretfoto van Jacques
+    naam: 'Jacques Pieters',
     citaat: 'Fotografie is voor mij het vasthouden van een gevoel — niet enkel een moment.',
     biografie: [
       'Ik ben Jacques, geboren en getogen in Zuid-Limburg. De glooiende heuvels, het warme licht aan het eind van de dag en de mensen die hier wonen — dat is waar mijn liefde voor fotografie begon.',
       'Wat ik fotografeer loopt uiteen: van het stille moment vlak na een geboorte tot de drukte van een bruiloft, van strakke architectuur tot een sfeervol bedrijfsverhaal. Steeds zoek ik naar hetzelfde: het échte, ongedwongen moment.',
       'Ik werk rustig en persoonlijk. Geen geforceerde poses, maar de ruimte om jezelf te zijn. Zo ontstaan beelden waar je over tien jaar nog met een glimlach naar kijkt.',
       'Werk je samen met mij, dan krijg je geen standaardpakket maar aandacht voor jouw verhaal — in Maastricht, Heerlen of waar dan ook in Limburg.'
+    ],
+    diensten: [
+      "Portretfoto's",
+      "Architectuurfoto's",
+      'Bruiloften',
+      "Zwangerschapsfoto's",
+      'Newborn-shoots',
+      'Baby-shoots & Cake Smash',
+      'Familie-shoots',
+      'Bedrijfsfotografie',
+      'Dieren-shoots',
+      'Communie & Kinderfeesten',
+      'Sport & Evenementen'
     ]
+  };
+
+  // --- Pagina-teksten (redactioneel, via DataAPI te overschrijven door Sanity) ---
+  const siteTeksten = {
+    heroTitel: 'JPJ',
+    heroSubtitel: 'Fotografie',
+    aboutEyebrow: 'Over Jacques',
+    portfolioTitel: 'Portfolio',
+    portfolioSubtitel: 'Een greep uit het werk van JPJ Fotografie.',
+    ctaTitel: 'Klaar voor iets moois?',
+    ctaSubtitel: 'Neem vrijblijvend contact op',
+    ctaKnop: 'Stuur een bericht →',
+    contactTitel: 'Laten we kennismaken',
+    contactSubtitel: 'Vertel me over uw fotowensen.'
   };
 
   // helpers afgeleid
@@ -180,6 +208,7 @@ window.JPJ_DATA = (function () {
     covers: covers,
     instellingen: instellingen,
     overMij: overMij,
+    siteTeksten: siteTeksten,
     photosByCategory: photosByCategory,
     countByCategory: countByCategory,
     mainCategories: categories.filter(function (c) { return !c.parent; })

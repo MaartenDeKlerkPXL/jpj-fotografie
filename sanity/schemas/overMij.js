@@ -9,7 +9,13 @@ export default {
       title: 'Jouw foto (groot formaat)',
       type: 'image',
       options: { hotspot: true },
-      description: 'Horizontaal formaat werkt het beste — minimaal 1400px breed.'
+      description: 'Staand of vierkant formaat werkt het beste — minimaal 1400px.'
+    },
+    {
+      name: 'naam',
+      title: 'Naam',
+      type: 'string',
+      description: 'Jouw naam zoals die boven het verhaal verschijnt. Bijv. "Jacques Pieters".'
     },
     {
       name: 'citaat',
@@ -24,6 +30,13 @@ export default {
       type: 'array',
       of: [{ type: 'block' }],
       description: 'Jouw tekst, opgedeeld in alinea\'s. Gebruik de enter-toets voor een nieuwe alinea.'
+    },
+    {
+      name: 'diensten',
+      title: 'Ik fotografeer (lijst)',
+      type: 'array',
+      of: [{ type: 'string' }],
+      description: 'Eén regel per dienst, bijv. "Bruiloften", "Newborn-shoots". Verschijnt op de Over mij-pagina.'
     }
   ]
 }

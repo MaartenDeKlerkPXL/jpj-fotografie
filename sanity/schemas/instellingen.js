@@ -20,17 +20,8 @@ export default {
     {
       name: 'email',
       title: 'E-mailadres',
-      type: 'string'
-    },
-    {
-      name: 'telefoon',
-      title: 'Telefoonnummer',
-      type: 'string'
-    },
-    {
-      name: 'instagram',
-      title: 'Instagram URL',
-      type: 'url'
+      type: 'string',
+      description: 'Contact loopt uitsluitend via e-mail — er is bewust geen telefoonveld.'
     },
     {
       name: 'regio',

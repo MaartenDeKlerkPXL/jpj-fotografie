@@ -3,7 +3,9 @@ import { structureTool } from 'sanity/structure'
 import { visionTool } from '@sanity/vision'
 import { schemaTypes } from './schemas'
 
-// TODO: Vervang 'YOUR_PROJECT_ID' door jouw Sanity project-ID (sanity.io/manage)
+// BEWUSTE KEUZE VOOR V1: deze Studio is nog niet gekoppeld — de site draait op
+// js/data.js. Pas 'YOUR_PROJECT_ID' hieronder én in js/sanity.js aan wanneer je
+// in een latere versie alsnog voor een live Sanity-koppeling kiest.
 export default defineConfig({
   name: 'jpj-fotografie',
   title: 'JPJ Fotografie',
@@ -22,6 +24,9 @@ export default defineConfig({
             S.listItem()
               .title('Site-instellingen')
               .child(S.document().schemaType('instellingen').documentId('instellingen')),
+            S.listItem()
+              .title('Pagina-teksten')
+              .child(S.document().schemaType('siteTeksten').documentId('siteTeksten')),
             S.listItem()
               .title('Over mij')
               .child(S.document().schemaType('overMij').documentId('overMij')),

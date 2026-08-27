@@ -4,10 +4,9 @@
 (function () {
   'use strict';
 
-  // TODO: Vervang door jouw eigen EmailJS-gegevens (dashboard.emailjs.com)
-  const EMAILJS_SERVICE_ID  = 'YOUR_SERVICE_ID';
-  const EMAILJS_TEMPLATE_ID = 'YOUR_TEMPLATE_ID';
-  const EMAILJS_PUBLIC_KEY  = 'YOUR_PUBLIC_KEY';
+  const EMAILJS_SERVICE_ID  = 'service_s2pge4f';
+  const EMAILJS_TEMPLATE_ID = 'template_ldhd69s';
+  const EMAILJS_PUBLIC_KEY  = 'BKNOFZ05gMJ_VtcsV';
 
   const EMAILJS_READY =
     EMAILJS_PUBLIC_KEY !== 'YOUR_PUBLIC_KEY' &&
@@ -25,6 +24,17 @@
     } catch (e) {}
   }
 
+  async function fillTeksten() {
+    try {
+      const t = await window.DataAPI.siteTeksten();
+      if (!t) return;
+      const titel = document.getElementById('contactTitel');
+      const sub = document.getElementById('contactSub');
+      if (titel && t.contactTitel) titel.textContent = t.contactTitel;
+      if (sub && t.contactSubtitel) sub.textContent = t.contactSubtitel;
+    } catch (e) {}
+  }
+
   function setError(name, msg) {
     const el = document.querySelector('[data-error-for="' + name + '"]');
     const field = document.getElementById(name);
@@ -34,10 +44,10 @@
 
   function validate(form) {
     let ok = true;
+    // type_shoot en locatie zijn optioneel — niet valideren (waarde gaat wel mee in EmailJS-params)
     const checks = [
       { name: 'naam', test: function (v) { return v.trim().length >= 2; }, msg: 'Vul uw naam in.' },
       { name: 'email', test: function (v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()); }, msg: 'Vul een geldig e-mailadres in.' },
-      { name: 'type_shoot', test: function (v) { return !!v; }, msg: 'Kies een type fotoshoot.' },
       { name: 'bericht', test: function (v) { return v.trim().length >= 5; }, msg: 'Schrijf een kort bericht.' }
     ];
     checks.forEach(function (c) {
@@ -108,6 +118,7 @@
 
   document.addEventListener('DOMContentLoaded', function () {
     fillPhoto();
+    fillTeksten();
     initForm();
     document.dispatchEvent(new Event('jpj:ready'));
   });
