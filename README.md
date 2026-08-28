@@ -1,6 +1,6 @@
 # JPJ Fotografie — portfolio website
 
-Een complete, productieklare portfoliosite voor fotograaf Jacques Pieters
+Een complete, productieklare portfoliosite voor fotograaf Jacques Janssen
 (JPJ Fotografie) uit Zuid-Limburg. Vanilla HTML/CSS/JS + GSAP, klaar voor
 Sanity (CMS), EmailJS (contactformulier) en Vercel (hosting).
 
@@ -37,37 +37,32 @@ robots.txt              Crawl-toestemming + verwijzing naar sitemap.xml
 sitemap.xml             Alle statische pagina's + portfolio-categorieën
 ```
 
-## Sanity koppelen (bewust uitgesteld voor v1 — site werkt volledig zonder)
-Voor v1 draait de site **uitsluitend** op de lokale data in `js/data.js`. Dit is
-geen tijdelijke noodval maar een bewuste keuze: er is nergens een halve
-Sanity-koppeling die alsnog verwacht wordt. Onderstaande stappen zijn alleen
-relevant als je in een latere versie alsnog voor een live CMS kiest.
-1. Maak een project op [sanity.io/manage](https://www.sanity.io/manage).
-2. Vul het project-ID in op **twee** plekken:
-   - `js/sanity.js`  → `const PROJECT_ID = 'YOUR_PROJECT_ID';`
-   - `sanity/sanity.config.js` → `projectId: 'YOUR_PROJECT_ID'`
-3. Start de Studio:
-   ```bash
-   cd sanity
-   npm install sanity @sanity/vision
-   npx sanity dev
-   ```
-4. Vul de documenten:
-   - **Site-instellingen** (singleton): tagline, e-mail, regio, contactfoto.
-     Contact loopt bewust alleen via e-mail — er is geen telefoonveld. Er is ook
-     geen social-mediaveld: Jacques heeft (nog) geen Instagram-account.
-   - **Pagina-teksten** (singleton, `siteTeksten`): hero-titel/ondertitel, portfolio-titel/ondertitel,
-     CTA-titel/ondertitel/knoptekst, contact-titel/ondertitel, label boven het citaat.
-   - **Over mij** (singleton): foto, **naam**, citaat, verhaal (biografie) en de **diensten**-lijst.
-   - **Categorieën**: de 6 hoofdcategorieën + subcategorieën met een *Subcategorie van*-referentie.
-     Sport & Events heeft bijv. de subcategorieën **Sport** en **Events**.
-   - **Foto's**: koppel elke foto aan een (sub)categorie; vink max. 6 aan als "uitgelicht".
-   Zodra het project-ID is ingevuld, schakelt de site automatisch over van de
-   lokale foto's/teksten naar de live Sanity-data (per veld wordt teruggevallen op
-   `js/data.js` als een veld in Sanity nog leeg is).
+## Sanity — gekoppeld, maar bewust nog niet live
+Het Sanity-project bestaat en is echt gekoppeld: project-ID `v78po3b2` staat in
+zowel `js/sanity.js` als `sanity/sanity.config.js`/`sanity.cli.js`, en de
+GROQ-queries in `js/sanity.js` zijn getest tegen de live API (zie `OVERDRACHT.md`
+voor de details). CORS-origins zijn al toegevoegd voor `https://www.jpjfotografie.nl`,
+`https://jpjfotografie.nl` en `http://localhost:8000`.
 
-> CORS: voeg in sanity.io/manage onder *API → CORS origins* je site-URL toe
-> (bijv. `http://localhost:8000` en je Vercel-domein).
+**De site zelf leest hier nog niet van** — dat is een aparte, bewuste knop:
+`SANITY_LIVE` bovenin `js/sanity.js`, nu op `false`. Zet die op `true` zodra
+Jack via Studio voldoende foto's heeft ingevuld (zie `OVERDRACHT.md`); tot die
+tijd blijft de site op `js/data.js` draaien, ook al is Sanity technisch
+bereikbaar. Per veld valt de site terug op `js/data.js` als een Sanity-veld nog
+leeg is, dus een geleidelijke overgang kan ook.
+
+**Studio openen:**
+```bash
+cd sanity
+npm install        # eenmalig — package.json staat al klaar
+npx sanity dev      # lokaal, op http://localhost:3333
+# of, om Jack een vast adres te geven zonder dat hij iets hoeft te installeren:
+npx sanity deploy --url jpj-fotografie   # publiceert naar jpj-fotografie.sanity.studio
+```
+De zijbalk bevat: Site-instellingen, Pagina-teksten, Over mij, Categorieën,
+Foto's en Veelgestelde vragen. De 17 categorieën en de huidige teksten/FAQ
+staan al ingevuld (zie `OVERDRACHT.md`) — er hoeft alleen nog foto's aan
+gekoppeld te worden.
 
 ## Contactformulier (EmailJS)
 Live gekoppeld in `js/contact.js` — het formulier verstuurt echte e-mail via

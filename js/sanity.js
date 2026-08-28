@@ -1,21 +1,26 @@
 /* =============================================================================
    sanity.js — Sanity fetch-helper + image-URL builder
    -----------------------------------------------------------------------------
-   BEWUSTE KEUZE VOOR V1: Sanity is niet aangesloten. De site draait volledig
-   op de lokale data in js/data.js — dat is geen tijdelijke noodval, maar de
-   vaste databron voor deze versie. PROJECT_ID blijft op 'YOUR_PROJECT_ID' staan
-   zodat SANITY_READY altijd false is en geen enkele pagina een live-koppeling
-   verwacht. Wil je in een latere versie alsnog op Sanity overstappen: vul
-   PROJECT_ID hieronder én in sanity/sanity.config.js in, en volg de stappen in
-   de README.
+   Sanity-project is echt gekoppeld (PROJECT_ID hieronder) en Studio is bruikbaar
+   voor Jack. De SITE zelf draait desondanks BEWUST nog op de lokale data in
+   js/data.js: het Sanity-project bevat momenteel nog geen foto's/teksten (Jack
+   moet dat zelf via Studio invullen), dus live overschakelen zou nu juist alle
+   categorieën leeg tonen in plaats van alleen de 4 die dat al zijn.
+
+   SANITY_LIVE is de knop die dit regelt — volledig losgekoppeld van of er een
+   geldig PROJECT_ID staat, zodat het invullen van een project-ID niet per
+   ongeluk de site laat overschakelen. Zet 'm op true zodra Jack via Studio
+   voldoende content heeft ingevuld en de site live Sanity-data moet tonen.
    ========================================================================== */
 
-const PROJECT_ID = 'YOUR_PROJECT_ID';
+const PROJECT_ID = 'v78po3b2';
 const DATASET    = 'production';
 const API_VER    = '2023-05-03';
 
-// Voor v1 altijd false (zie toelichting hierboven) — geen halve Sanity-koppeling.
-const SANITY_READY = PROJECT_ID && PROJECT_ID !== 'YOUR_PROJECT_ID';
+// BEWUSTE KEUZE: front-end blijft op de lokale fallback. Zie toelichting hierboven.
+const SANITY_LIVE = false;
+
+const SANITY_READY = SANITY_LIVE && PROJECT_ID && PROJECT_ID !== 'YOUR_PROJECT_ID';
 
 async function sanityFetch(query) {
   const url = `https://${PROJECT_ID}.api.sanity.io/v${API_VER}/data/query/${DATASET}?query=${encodeURIComponent(query)}`;
@@ -70,7 +75,9 @@ const QUERIES = {
     portfolioTitel, portfolioSubtitel,
     ctaTitel, ctaSubtitel, ctaKnop,
     contactTitel, contactSubtitel
-  }`
+  }`,
+
+  faq: `*[_type == "faq"] | order(volgorde asc) { vraag, antwoord }`
 };
 
 /* -----------------------------------------------------------------------------
@@ -242,6 +249,12 @@ const DataAPI = {
   categoryName(slug) {
     const c = window.JPJ_DATA.categories.find(function (x) { return x.slug === slug; });
     return c ? c.naam : '';
+  },
+
+  async faq() {
+    if (!SANITY_READY) return window.JPJ_DATA.faq;
+    const res = await sanityFetch(QUERIES.faq);
+    return (res && res.length) ? res : window.JPJ_DATA.faq;
   }
 };
 

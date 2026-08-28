@@ -128,6 +128,20 @@ window.JPJ_DATA = (function () {
     const cat = found ? categories.find(function (c) { return c.slug === found.cat; }) : null;
     return Object.assign({}, found, { catNaam: cat ? cat.naam : '' });
   });
+  // Twee uitgelichte foto's kunnen toevallig onder dezelfde hoofdcategorie
+  // vallen (bv. bedrijf/1020.jpg en architectuur/Industrie-007-scaled.jpg
+  // vallen allebei onder "Zakelijk"), waardoor twee tegels hetzelfde label
+  // tonen. Val in dat geval terug op de specifiekere subcategorie, zodat elke
+  // tegel weer een uniek label heeft — de overige, niet-botsende tegels
+  // blijven gewoon hun hoofdcategorienaam tonen.
+  const catNaamCounts = {};
+  featured.forEach(function (f) { catNaamCounts[f.catNaam] = (catNaamCounts[f.catNaam] || 0) + 1; });
+  featured.forEach(function (f) {
+    if (catNaamCounts[f.catNaam] > 1 && f.sub) {
+      const subCat = categories.find(function (c) { return c.slug === f.sub; });
+      if (subCat) f.catNaam = subCat.naam;
+    }
+  });
 
   // De grote hero-foto rechts op de homepage (warme signatuurfoto)
   const heroImage = {
@@ -156,7 +170,7 @@ window.JPJ_DATA = (function () {
   // --- Over mij ------------------------------------------------------------
   const overMij = {
     portretFoto: 'images/home/jackjanssen-1820x2048.jpg', // echte portretfoto van Jacques
-    naam: 'Jacques Pieters',
+    naam: 'Jacques Janssen',
     citaat: 'Fotografie is voor mij het vasthouden van een gevoel — niet enkel een moment.',
     biografie: [
       'Ik ben Jacques, geboren en getogen in Zuid-Limburg. De glooiende heuvels, het warme licht aan het eind van de dag en de mensen die hier wonen — dat is waar mijn liefde voor fotografie begon.',
@@ -193,6 +207,37 @@ window.JPJ_DATA = (function () {
     contactSubtitel: 'Vertel me over uw fotowensen.'
   };
 
+  // --- Veelgestelde vragen ---------------------------------------------------
+  // PLACEHOLDER: logische, veilige standaardvragen zonder verzonnen specifieks
+  // (bijv. geen concrete prijzen). Vervang via Sanity zodra Jack de echte
+  // vragen/antwoorden aanlevert — zie OVERDRACHT.md.
+  const faq = [
+    {
+      vraag: 'Hoe boek ik een fotoshoot?',
+      antwoord: 'Neem contact op via het formulier op deze site of stuur een e-mail. We bespreken dan samen wat je zoekt en plannen een datum die past.'
+    },
+    {
+      vraag: 'Hoe lang duurt een fotoshoot gemiddeld?',
+      antwoord: 'Dat verschilt per type shoot — reken op ongeveer 1 tot 2 uur voor een portret- of gezinsshoot. Bruiloften en evenementen duren uiteraard langer.'
+    },
+    {
+      vraag: 'Wanneer ontvang ik mijn foto\'s?',
+      antwoord: 'Meestal binnen twee tot drie weken na de shoot ontvang je een link met de bewerkte foto\'s.'
+    },
+    {
+      vraag: 'Werk je ook buiten Zuid-Limburg?',
+      antwoord: 'Ja, ik werk voornamelijk in Zuid-Limburg, maar ben voor shoots elders in het land ook beschikbaar. Neem contact op om de mogelijkheden te bespreken.'
+    },
+    {
+      vraag: 'Wat kost een fotoshoot?',
+      antwoord: 'Dat hangt af van het type shoot en de duur. Neem vrijblijvend contact op voor een prijsopgave op maat.'
+    },
+    {
+      vraag: 'Kan ik specifieke wensen aangeven voor de shoot?',
+      antwoord: 'Zeker — laat je wensen weten bij het boeken, dan houd ik daar tijdens de shoot rekening mee.'
+    }
+  ];
+
   // helpers afgeleid
   function photosByCategory(slug) {
     // hoofdcategorie of subcategorie
@@ -209,6 +254,7 @@ window.JPJ_DATA = (function () {
     instellingen: instellingen,
     overMij: overMij,
     siteTeksten: siteTeksten,
+    faq: faq,
     photosByCategory: photosByCategory,
     countByCategory: countByCategory,
     mainCategories: categories.filter(function (c) { return !c.parent; })

@@ -35,6 +35,23 @@
     } catch (e) {}
   }
 
+  async function fillFaq() {
+    const list = document.getElementById('faqList');
+    if (!list) return;
+    try {
+      const items = await window.DataAPI.faq();
+      if (!items || !items.length) return;
+      list.innerHTML = items.map(function (item) {
+        return (
+          '<details class="faq__item">' +
+            '<summary class="faq__question">' + item.vraag + '</summary>' +
+            '<p class="faq__answer">' + item.antwoord + '</p>' +
+          '</details>'
+        );
+      }).join('');
+    } catch (e) {}
+  }
+
   function setError(name, msg) {
     const el = document.querySelector('[data-error-for="' + name + '"]');
     const field = document.getElementById(name);
@@ -119,6 +136,7 @@
   document.addEventListener('DOMContentLoaded', function () {
     fillPhoto();
     fillTeksten();
+    fillFaq();
     initForm();
     document.dispatchEvent(new Event('jpj:ready'));
   });

@@ -206,7 +206,15 @@
     if (!gallery) return;
 
     const params = new URLSearchParams(window.location.search);
-    const cat = params.get('cat') || 'familie-gezin';
+
+    // Zonder ?cat= toont deze pagina dezelfde inhoud als ?cat=familie-gezin,
+    // maar dan als losse, ongelinkte URL met een eigen canonical — dat is
+    // duplicate content voor zoekmachines. Stuur meteen door naar de echte URL.
+    if (!params.get('cat')) {
+      window.location.replace('portfolio-categorie.html?cat=familie-gezin');
+      return;
+    }
+    const cat = params.get('cat');
 
     // titel + subnav
     const naam = catName(cat) || 'Portfolio';

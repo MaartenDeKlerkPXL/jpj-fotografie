@@ -15,7 +15,7 @@ export default {
       name: 'naam',
       title: 'Naam',
       type: 'string',
-      description: 'Jouw naam zoals die boven het verhaal verschijnt. Bijv. "Jacques Pieters".'
+      description: 'Jouw naam zoals die boven het verhaal verschijnt. Bijv. "Jacques Janssen".'
     },
     {
       name: 'citaat',

@@ -49,7 +49,6 @@
     ],
     "url": "https://www.jpjfotografie.nl",
     "image": "https://www.jpjfotografie.nl/og-image.jpg",
-    "priceRange": "$$",
     "openingHoursSpecification": {
       "@type": "OpeningHoursSpecification",
       "dayOfWeek": ["Monday","Tuesday","Wednesday","Thursday","Friday","Saturday","Sunday"]
@@ -58,7 +57,7 @@
   </script>
   <script>document.documentElement.className += ' js-anim';</script>
 </head>
-<body>
+<body class="page-contact">
   <div id="cursor"><span class="cursor__label">Bekijk</span></div>
   <div class="page-transition" aria-hidden="true"></div>
 
@@ -83,6 +82,7 @@
     <section class="contact">
       <div class="contact__photo" id="contactPhoto"></div>
       <div class="contact__form-panel">
+        <a href="index.html" class="contact__logo">JPJ Fotografie</a>
         <h1 class="contact__title" id="contactTitel">Laten we kennismaken</h1>
         <p class="contact__sub" id="contactSub">Vertel me over uw fotowensen.</p>
 
@@ -135,6 +135,15 @@
           <button type="submit" class="btn-submit" id="submitBtn">Verzenden <span class="arrow">→</span></button>
         </form>
       </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="section container faq">
+      <div class="faq__head">
+        <h2 class="faq__title">Veelgestelde vragen</h2>
+        <div class="faq__rule"></div>
+      </div>
+      <div class="faq__list" id="faqList"></div>
     </section>
   </main>
 

@@ -384,6 +384,11 @@ ul { list-style: none; }
   line-height: 1.4;
   color: var(--ink);
 }
+/* Echte grid-item-wrapper: de <picture> zelf (display:contents) telt in sommige
+   rendering-contexten niet betrouwbaar mee als los grid-item naast
+   .about-teaser__text, waardoor de foto onder de tekst in kolom 1 belandt
+   i.p.v. in kolom 2 — deze wrap voorkomt dat. */
+.about-teaser__photo-wrap { width: 100%; }
 .about-teaser__photo {
   width: 100%;
   aspect-ratio: 4 / 5;
@@ -729,9 +734,9 @@ ul { list-style: none; }
   font-size: var(--size-display);
   letter-spacing: -0.01em;
   color: var(--ink);
-  margin-top: 0.75rem;
+  margin-top: 0.35rem;
 }
-.about-split__rule { height: 0.5px; background: var(--border); width: 100%; margin: 1rem 0 1.5rem; }
+.about-split__rule { height: 0.5px; background: var(--border); width: 100%; margin: 0.65rem 0 1rem; }
 
 .about-bio { position: relative; padding-left: 1.5rem; }
 .about-bio::before {
@@ -776,6 +781,21 @@ ul { list-style: none; }
   background-size: cover;
   background-position: center;
   background-color: var(--skeleton);
+}
+/* De vaste nav-logo overlapt hier de (donkere) contactfoto — onleesbaar.
+   Verberg 'm hier en toon in plaats daarvan .contact__logo, uitgelijnd met
+   de kop, in de witte kolom. Alleen relevant zolang de foto zichtbaar is
+   (>=768px); op mobiel is .contact__photo display:none, dus daar blijft de
+   gewone nav-logo gewoon zichtbaar — zie de mobiele media query onderaan. */
+.page-contact .nav__logo { visibility: hidden; }
+.contact__logo {
+  display: inline-block;
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: 21px;
+  letter-spacing: -0.01em;
+  color: var(--ink);
+  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
 }
 .contact__form-panel {
   background: var(--white);
@@ -864,6 +884,46 @@ ul { list-style: none; }
 .btn-submit.is-error { color: var(--error); border-color: var(--error); background: transparent; }
 
 /* =============================================================================
+   FAQ (contactpagina)
+   ========================================================================== */
+.faq { max-width: 760px; }
+.faq__head { display: flex; flex-direction: column; margin-bottom: clamp(2rem, 4vw, 3rem); }
+.faq__title {
+  font-family: var(--serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: var(--size-display);
+  line-height: var(--leading-title);
+  color: var(--ink);
+}
+.faq__rule { height: 0.5px; background: var(--border); margin-top: 1rem; width: 100%; }
+.faq__list { display: flex; flex-direction: column; }
+.faq__item { border-bottom: 1px solid var(--border); padding: 1.25rem 0; }
+.faq__question {
+  font-family: var(--sans);
+  font-size: 1rem;
+  font-weight: 500;
+  color: var(--ink);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.faq__question::-webkit-details-marker { display: none; }
+.faq__question::after {
+  content: '+';
+  flex: 0 0 auto;
+  font-family: var(--serif);
+  font-size: 1.3rem;
+  color: var(--muted);
+  transition: transform 0.25s ease;
+}
+.faq__item[open] .faq__question::after { content: '−'; }
+.faq__answer { margin-top: 0.85rem; color: var(--muted); line-height: var(--leading-body); }
+
+/* =============================================================================
    FOOTER
    ========================================================================== */
 .footer {
@@ -911,13 +971,10 @@ ul { list-style: none; }
     grid-template-columns: 1fr 1fr;
     min-height: calc(100svh - var(--nav-h) - var(--footer-h));
   }
-  /* mediakolom vult de sectie; de foto zelf is minder hoog en gecentreerd,
-     zodat er boven en onder ademruimte ontstaat */
-  .about-split__media { min-height: 100%; height: 100%; }
-  .about-split__photo {
-    height: 82vh;
-    max-height: calc(100svh - var(--nav-h) - var(--footer-h));
-  }
+  /* Foto vult de volledige hoogte van de mediakolom, gelijk aan de tekstkolom
+     ernaast — geen losse hoogtes meer, dus align-items:stretch i.p.v. center. */
+  .about-split__media { min-height: 100%; height: 100%; align-items: stretch; }
+  .about-split__photo { height: 100%; }
   .about-split__text { padding-top: calc(var(--nav-h) + clamp(1.5rem, 4vw, 3rem)); }
 }
 
@@ -970,10 +1027,14 @@ ul { list-style: none; }
   .hero__divider { display: none; }
   .hero__scroll { display: none; }
 
-  .about-teaser__photo { aspect-ratio: auto; height: 50vw; order: -1; }
+  .about-teaser__photo-wrap { order: -1; }
+  .about-teaser__photo { aspect-ratio: auto; height: 50vw; }
 
   .contact { grid-template-columns: 1fr; min-height: auto; }
   .contact__photo { display: none; }
+  /* Geen foto meer achter de nav op mobiel → gewone nav-logo is hier prima leesbaar. */
+  .page-contact .nav__logo { visibility: visible; }
+  .contact__logo { display: none; }
 
   .gallery__row.row-d { grid-template-columns: 1fr 1fr; }
   .gallery__row.row-p1 { grid-template-columns: 1fr; }
