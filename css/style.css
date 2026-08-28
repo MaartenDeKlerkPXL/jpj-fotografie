@@ -465,6 +465,23 @@ ul { list-style: none; }
 .page-head__sub { margin-top: 1rem; color: var(--muted); font-size: var(--size-body); }
 
 /* =============================================================================
+   PRIVACYVERKLARING
+   ========================================================================== */
+.legal { max-width: 760px; }
+.legal__block { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.legal__block:last-child { margin-bottom: 0; }
+.legal__title {
+  font-family: var(--serif);
+  font-weight: 500;
+  font-size: var(--size-title);
+  color: var(--ink);
+  margin-bottom: 0.75rem;
+}
+.legal__block p { color: var(--muted); line-height: var(--leading-body); }
+.legal__block p a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.legal__block p a:hover { color: var(--accent); }
+
+/* =============================================================================
    PORTFOLIO SUB-NAV
    ========================================================================== */
 .subnav {
@@ -664,6 +681,8 @@ ul { list-style: none; }
   color: var(--ink);
 }
 .empty-state__text { margin-top: 0.75rem; color: var(--muted); }
+.empty-state__text a { color: var(--ink); text-decoration: underline; text-underline-offset: 2px; }
+.empty-state__text a:hover { color: var(--accent); }
 
 /* =============================================================================
    LIGHTBOX
@@ -783,19 +802,16 @@ ul { list-style: none; }
   background-color: var(--skeleton);
 }
 /* De vaste nav-logo overlapt hier de (donkere) contactfoto — onleesbaar.
-   Verberg 'm hier en toon in plaats daarvan .contact__logo, uitgelijnd met
-   de kop, in de witte kolom. Alleen relevant zolang de foto zichtbaar is
-   (>=768px); op mobiel is .contact__photo display:none, dus daar blijft de
-   gewone nav-logo gewoon zichtbaar — zie de mobiele media query onderaan. */
-.page-contact .nav__logo { visibility: hidden; }
-.contact__logo {
-  display: inline-block;
-  font-family: var(--serif);
-  font-weight: 500;
-  font-size: 21px;
-  letter-spacing: -0.01em;
-  color: var(--ink);
-  margin-bottom: clamp(1.5rem, 4vw, 2.5rem);
+   Blijft gewoon onderdeel van de vaste nav (zelfde hoogte, blijft zichtbaar
+   tijdens scrollen) maar schuift horizontaal op tot boven de witte kolom,
+   links uitgelijnd met de kop. .contact spans de volle paginabreedte zonder
+   .container, dus 42vw = de kolomgrens; + de panel-padding = de linkerkant
+   van de kop; - de standaard nav-padding = hoeveel extra margin er nodig is.
+   Alleen relevant zolang de foto zichtbaar is (>=768px); op mobiel verdwijnt
+   .contact__photo, dus daar staat de logo gewoon weer op z'n normale plek
+   — zie de mobiele media query onderaan. */
+.page-contact .nav__logo {
+  margin-left: calc(42vw + clamp(3rem, 8vw, 6rem) - var(--container-x));
 }
 .contact__form-panel {
   background: var(--white);
@@ -992,13 +1008,29 @@ ul { list-style: none; }
   .work-item:nth-child(4) { grid-area: p4; }
   .work-item:nth-child(5) { grid-area: p5; }
   .work-item:nth-child(6) { grid-area: p6; }
+  /* p2/p3 spannen 2 rijen en rekken uit tot de hoogte die p1/p4/p5/p6
+     hieronder bepalen (height: 100%, hun default). */
   .work-item__frame { height: 100%; }
+  /* p1/p4/p5/p6: hoogte puur afleiden uit de (vaste) kolombreedte × aspect-
+     ratio, niet ook nog stretchen naar de rijhoogte — anders bepaalt de
+     rijhoogte de tegel-hoogte, die op zijn beurt de rijhoogte bepaalt (want
+     er is geen grid-template-rows), en die circulaire afhankelijkheid maakt
+     tegels net te breed/smal: ongelijke tussenruimte en, in het ergste
+     geval, een tegel die buiten haar kolom uitsteekt. */
   .work-item:nth-child(1) .work-item__frame,
   .work-item:nth-child(4) .work-item__frame,
   .work-item:nth-child(5) .work-item__frame,
-  .work-item:nth-child(6) .work-item__frame { aspect-ratio: 3 / 2; }
+  .work-item:nth-child(6) .work-item__frame { aspect-ratio: 3 / 2; height: auto; align-self: start; }
   .work-item:nth-child(2) .work-item__frame,
   .work-item:nth-child(3) .work-item__frame { aspect-ratio: auto; }
+  /* Zonder dit rekt de eigen beeldverhouding van de foto in p2/p3 (staand
+     beeldmateriaal, elke keer een andere verhouding) de auto-sizing van de
+     grid-rij op, ondanks object-fit: cover — want CSS Grid meet vóór het
+     croppen de intrinsieke inhoud van elke tegel om de rijhoogte te
+     bepalen. Absoluut positioneren haalt de foto uit die meting; de tegel
+     krijgt zijn hoogte dan uitsluitend van p1/p4/p5/p6 hierboven. */
+  .work-item:nth-child(2) .work-item__img,
+  .work-item:nth-child(3) .work-item__img { position: absolute; inset: 0; }
 
   .cards-grid {
     grid-template-columns: 1.6fr 1fr 1fr;
@@ -1032,9 +1064,8 @@ ul { list-style: none; }
 
   .contact { grid-template-columns: 1fr; min-height: auto; }
   .contact__photo { display: none; }
-  /* Geen foto meer achter de nav op mobiel → gewone nav-logo is hier prima leesbaar. */
-  .page-contact .nav__logo { visibility: visible; }
-  .contact__logo { display: none; }
+  /* Geen foto meer achter de nav op mobiel → gewone nav-logo op de normale plek is hier prima leesbaar. */
+  .page-contact .nav__logo { margin-left: 0; }
 
   .gallery__row.row-d { grid-template-columns: 1fr 1fr; }
   .gallery__row.row-p1 { grid-template-columns: 1fr; }

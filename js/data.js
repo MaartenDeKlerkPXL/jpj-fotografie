@@ -110,7 +110,7 @@ window.JPJ_DATA = (function () {
     p('sport/Kart-in-actie.jpg', 'sport-events', 'sport', 'Kart scheurt door de bocht', 'l'),
     p('sport/Kart-start.jpg', 'sport-events', 'sport', 'Spanning bij de start van de kartrace', 'l'),
     p('sport/Monteurs-aan-het-werk.jpg', 'sport-events', 'sport', 'Monteurs aan het werk in de pitstraat', 'l'),
-    p('sport/448A3963-scaled.jpg', 'sport-events', 'sport', 'Dynamisch sportmoment vastgelegd', 'p')
+    p('sport/448A3963-scaled.jpg', 'sport-events', 'sport', 'Grensrechter met vlag langs de lijn tijdens een voetbalwedstrijd', 'p')
   ];
 
   // --- Uitgelichte foto's voor de homepage (Werk-grid) --------------------
@@ -171,12 +171,12 @@ window.JPJ_DATA = (function () {
   const overMij = {
     portretFoto: 'images/home/jackjanssen-1820x2048.jpg', // echte portretfoto van Jacques
     naam: 'Jacques Janssen',
-    citaat: 'Fotografie is voor mij het vasthouden van een gevoel — niet enkel een moment.',
+    citaat: 'Fotografie is voor mij het vasthouden van een gevoel, niet van een moment.',
     biografie: [
-      'Ik ben Jacques, geboren en getogen in Zuid-Limburg. De glooiende heuvels, het warme licht aan het eind van de dag en de mensen die hier wonen — dat is waar mijn liefde voor fotografie begon.',
-      'Wat ik fotografeer loopt uiteen: van het stille moment vlak na een geboorte tot de drukte van een bruiloft, van strakke architectuur tot een sfeervol bedrijfsverhaal. Steeds zoek ik naar hetzelfde: het échte, ongedwongen moment.',
-      'Ik werk rustig en persoonlijk. Geen geforceerde poses, maar de ruimte om jezelf te zijn. Zo ontstaan beelden waar je over tien jaar nog met een glimlach naar kijkt.',
-      'Werk je samen met mij, dan krijg je geen standaardpakket maar aandacht voor jouw verhaal — in Maastricht, Heerlen of waar dan ook in Limburg.'
+      'Ik ben Jacques, geboren en getogen in Zuid-Limburg. De glooiende heuvels, het warme licht aan het eind van de dag en de mensen die hier wonen zijn waar mijn liefde voor fotografie begon.',
+      'Wat ik fotografeer loopt uiteen, van het stille moment vlak na een geboorte tot de drukte van een bruiloft, van strakke architectuur tot een sfeervol bedrijfsverhaal. Ik zoek steeds naar hetzelfde: het échte, ongedwongen moment.',
+      'Ik werk rustig en persoonlijk. Geen geforceerde poses, maar de ruimte om uzelf te zijn. Zo ontstaan beelden waar u over tien jaar nog met een glimlach naar kijkt.',
+      'Werkt u met mij samen, dan neem ik de tijd om uw verhaal te leren kennen. Ik fotografeer in Maastricht, Heerlen en de rest van Limburg.'
     ],
     diensten: [
       "Portretfoto's",
@@ -214,18 +214,18 @@ window.JPJ_DATA = (function () {
   const faq = [
     {
       vraag: 'Hoe boek ik een fotoshoot?',
-      antwoord: 'Neem contact op via het formulier op deze site of stuur een e-mail. We bespreken dan samen wat je zoekt en plannen een datum die past.'
+      antwoord: 'Neem contact op via het formulier op deze site of stuur een e-mail. We bespreken dan samen wat u zoekt en plannen een datum die past.'
     },
     {
       vraag: 'Hoe lang duurt een fotoshoot gemiddeld?',
-      antwoord: 'Dat verschilt per type shoot — reken op ongeveer 1 tot 2 uur voor een portret- of gezinsshoot. Bruiloften en evenementen duren uiteraard langer.'
+      antwoord: 'Dat verschilt per type shoot. Reken op ongeveer 1 tot 2 uur voor een portret- of gezinsshoot; bruiloften en evenementen duren langer.'
     },
     {
       vraag: 'Wanneer ontvang ik mijn foto\'s?',
-      antwoord: 'Meestal binnen twee tot drie weken na de shoot ontvang je een link met de bewerkte foto\'s.'
+      antwoord: 'Meestal binnen twee tot drie weken na de shoot ontvangt u een link met de bewerkte foto\'s.'
     },
     {
-      vraag: 'Werk je ook buiten Zuid-Limburg?',
+      vraag: 'Werkt u ook buiten Zuid-Limburg?',
       antwoord: 'Ja, ik werk voornamelijk in Zuid-Limburg, maar ben voor shoots elders in het land ook beschikbaar. Neem contact op om de mogelijkheden te bespreken.'
     },
     {
@@ -234,7 +234,7 @@ window.JPJ_DATA = (function () {
     },
     {
       vraag: 'Kan ik specifieke wensen aangeven voor de shoot?',
-      antwoord: 'Zeker — laat je wensen weten bij het boeken, dan houd ik daar tijdens de shoot rekening mee.'
+      antwoord: 'Zeker. Laat uw wensen weten bij het boeken, dan houd ik daar tijdens de shoot rekening mee.'
     }
   ];
 

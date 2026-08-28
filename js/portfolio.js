@@ -18,13 +18,37 @@
 
   function catName(slug) { return window.DataAPI.categoryName(slug); }
 
+  // Zoekwoordrijke titel per categorie voor <title>/meta description — los van
+  // het kortere label dat op de pagina zelf (H1, subnav) getoond wordt.
+  const SEO_NAMES = {
+    'familie-gezin':      'Familiefotografie',
+    'portret-communie':   'Portret- en Communiefotografie',
+    'bruiloften':         'Bruiloftsfotografie',
+    'zakelijk':           'Zakelijke Fotografie',
+    'dieren':             'Dierenfotografie',
+    'sport-events':       'Sport- en Evenementenfotografie',
+    'zwangerschap':       'Zwangerschapsfotografie',
+    'newborn-baby':       'Newborn- en Babyfotografie',
+    'cake-smash':         'Cake Smash Fotoshoot',
+    'familieshoot':       'Familieshoot Fotografie',
+    'portret':            'Portretfotografie',
+    'communie':           'Communiefotografie',
+    'kinderfeesten':      'Kinderfeestjes Fotografie',
+    'bedrijfsfotografie': 'Bedrijfsfotografie',
+    'architectuur':       'Architectuurfotografie',
+    'sport':              'Sportfotografie',
+    'events':             'Evenementenfotografie'
+  };
+
   // Elke ?cat=-variant is eigen, indexeerbare content — canonical/OG moeten dus
   // meebewegen met de querystring, anders lijken alle categorieën duplicaten
   // van elkaar voor zoekmachines.
-  function updateMetaForCategory(naam) {
+  function updateMetaForCategory(cat, naam) {
+    const seoNaam = SEO_NAMES[cat] || naam;
     const url = window.location.origin + window.location.pathname + window.location.search;
-    const title = naam + ' — JPJ Fotografie';
-    const desc = 'Portfolio van JPJ Fotografie — ' + naam + '. Bekijk het werk in deze categorie.';
+    const title = seoNaam + ' — JPJ Fotografie';
+    const desc = seoNaam + ' door JPJ Fotografie, vakfotograaf in Zuid-Limburg. Bekijk het werk in deze categorie.';
+    document.title = title;
 
     const canonical = document.getElementById('canonical');
     if (canonical) canonical.href = url;
@@ -220,9 +244,8 @@
     const naam = catName(cat) || 'Portfolio';
     const titleEl = document.getElementById('catTitle');
     if (titleEl) titleEl.textContent = naam;
-    document.title = naam + ' — JPJ Fotografie';
     renderSubnav(cat);
-    updateMetaForCategory(naam);
+    updateMetaForCategory(cat, naam);
 
     // skeletons
     gallery.innerHTML =
@@ -238,7 +261,7 @@
       gallery.innerHTML =
         '<div class="empty-state">' +
           '<p class="empty-state__title">Binnenkort meer werk</p>' +
-          '<p class="empty-state__text">Voor deze categorie zijn nog geen foto\'s beschikbaar. Neem gerust contact op voor voorbeelden.</p>' +
+          '<p class="empty-state__text">Voor deze categorie zijn nog geen foto\'s beschikbaar. <a href="contact.html">Neem gerust contact op</a> voor voorbeelden.</p>' +
         '</div>';
       document.dispatchEvent(new Event('jpj:ready'));
       return;
@@ -336,7 +359,9 @@
       if (!t) return;
       const titel = document.getElementById('pfTitel');
       const sub = document.getElementById('pfSub');
-      if (titel && t.portfolioTitel) { titel.textContent = t.portfolioTitel; document.title = t.portfolioTitel + ' — JPJ Fotografie'; }
+      // H1 blijft editable via Sanity/data.js; <title> laten we ongemoeid — die
+      // staat al specifiek/SEO-vriendelijk in de HTML zelf.
+      if (titel && t.portfolioTitel) titel.textContent = t.portfolioTitel;
       if (sub && t.portfolioSubtitel) sub.textContent = t.portfolioSubtitel;
     } catch (e) {}
   }
