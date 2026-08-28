@@ -146,7 +146,7 @@ window.JPJ_DATA = (function () {
   // De grote hero-foto rechts op de homepage (warme signatuurfoto)
   const heroImage = {
     src: 'images/architectuur/Strijdhagen-012-scaled.jpg',
-    alt: 'Warme zonsondergang boven het Limburgse landschap — JPJ Fotografie'
+    alt: 'Warme zonsondergang boven het Limburgse landschap'
   };
 
   // --- Categorie-omslagfoto's voor het portfolio-overzicht ----------------

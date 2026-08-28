@@ -52,9 +52,12 @@ const QUERIES = {
     _id, afbeelding, altTekst, categorie->{ naam, slug }
   }`,
 
+  // fotoCount telt zowel foto's die direct aan de hoofdcategorie hangen als
+  // foto's die aan een van haar subcategorieën hangen — de meeste foto's
+  // zitten namelijk op subcategorie-niveau (zie photosByCategory hieronder).
   allCategories: `*[_type == "categorie" && !defined(parentCategorie)] | order(volgorde asc) {
     _id, naam, slug, coverFoto,
-    "fotoCount": count(*[_type == "foto" && categorie._ref == ^._id])
+    "fotoCount": count(*[_type == "foto" && (categorie._ref == ^._id || categorie->parentCategorie._ref == ^._id)])
   }`,
 
   categoriesByParent: (parentSlug) => `*[_type == "categorie" && parentCategorie->slug.current == "${parentSlug}"] | order(volgorde asc) {
