@@ -1,24 +1,24 @@
 /* =============================================================================
    sanity.js — Sanity fetch-helper + image-URL builder
    -----------------------------------------------------------------------------
-   Sanity-project is echt gekoppeld (PROJECT_ID hieronder) en Studio is bruikbaar
-   voor Jack. De SITE zelf draait desondanks BEWUST nog op de lokale data in
-   js/data.js: het Sanity-project bevat momenteel nog geen foto's/teksten (Jack
-   moet dat zelf via Studio invullen), dus live overschakelen zou nu juist alle
-   categorieën leeg tonen in plaats van alleen de 4 die dat al zijn.
+   Sanity-project is echt gekoppeld (PROJECT_ID hieronder) en Studio is live op
+   jpj-fotografie.sanity.studio. De site leest nu vanaf hier daadwerkelijk uit
+   Sanity — de content is er al gemigreerd (alle 53 foto's, categorieën, Over
+   mij, FAQ, instellingen). Vier (sub)categorieën (Dieren, Cake Smash, Communie,
+   Kinderfeesten) hebben nog geen foto's en tonen daarom de nette
+   "Binnenkort meer werk"-staat totdat Jack ze via Studio aanvult — dat is geen
+   fout, dezelfde staat toonden ze ook al op de lokale fallback.
 
    SANITY_LIVE is de knop die dit regelt — volledig losgekoppeld van of er een
    geldig PROJECT_ID staat, zodat het invullen van een project-ID niet per
-   ongeluk de site laat overschakelen. Zet 'm op true zodra Jack via Studio
-   voldoende content heeft ingevuld en de site live Sanity-data moet tonen.
+   ongeluk de site laat overschakelen.
    ========================================================================== */
 
 const PROJECT_ID = 'v78po3b2';
 const DATASET    = 'production';
 const API_VER    = '2023-05-03';
 
-// BEWUSTE KEUZE: front-end blijft op de lokale fallback. Zie toelichting hierboven.
-const SANITY_LIVE = false;
+const SANITY_LIVE = true;
 
 const SANITY_READY = SANITY_LIVE && PROJECT_ID && PROJECT_ID !== 'YOUR_PROJECT_ID';
 
