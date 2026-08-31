@@ -4,21 +4,27 @@
    ========================================================================== */
 
 /* --- Custom cursor (desktop only) ---------------------------------------- */
+/* Rust-status: een gevulde stip mét lichte rand + schaduw, zodat er altijd
+   contrast is — op een lichte sectie steekt de donkere vulling af, op een
+   donkere (hero-)foto steekt de lichte rand af. mix-blend-mode: difference
+   leek een mooie one-size-fits-all oplossing, maar het verschil tussen ink
+   (#111) en de crème achtergrond (--bg) blendt naar een kleur die bijna
+   identiek is aan die achtergrond, dus juist in rust viel de cursor weg. */
 #cursor {
   position: fixed;
   top: 0; left: 0;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   border-radius: 50%;
   background: var(--ink);
-  border: 1px solid transparent;
+  border: 1.5px solid var(--bg);
+  box-shadow: 0 0 3px rgba(0, 0, 0, 0.4);
   pointer-events: none;
   z-index: 10000;
   display: none;
   align-items: center;
   justify-content: center;
   transform: translate(-50%, -50%);
-  mix-blend-mode: difference;
 }
 #cursor .cursor__label {
   font-family: var(--sans);
@@ -30,7 +36,14 @@
   transition: opacity 0.2s ease;
   white-space: nowrap;
 }
-#cursor.is-hovering { background: transparent; border-color: var(--ink); }
+/* Hover-status blijft op mix-blend-mode: difference — dat werkte al goed
+   (grotere ring + label geven al genoeg contrast) en blijft ongewijzigd. */
+#cursor.is-hovering {
+  background: transparent;
+  border-color: var(--ink);
+  box-shadow: none;
+  mix-blend-mode: difference;
+}
 #cursor.is-hovering .cursor__label { opacity: 1; }
 
 /* Cursor only on real pointer + wide screens */
