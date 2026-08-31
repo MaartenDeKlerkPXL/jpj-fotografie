@@ -91,7 +91,7 @@
     document.addEventListener('mouseout', function (e) {
       if (e.target.closest(hoverSel) && !(e.relatedTarget && e.relatedTarget.closest && e.relatedTarget.closest(hoverSel))) {
         cursor.classList.remove('is-hovering');
-        gsap.to(cursor, { width: 10, height: 10, duration: 0.35, ease: 'power2.out' });
+        gsap.to(cursor, { width: 12, height: 12, duration: 0.35, ease: 'power2.out' });
       }
     });
   }
