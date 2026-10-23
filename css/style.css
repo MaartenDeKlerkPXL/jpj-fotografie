@@ -447,6 +447,35 @@ ul { list-style: none; }
 .cta__link:hover::after { transform: scaleX(1); }
 
 /* =============================================================================
+   404
+   ========================================================================== */
+/* Body als kolom zodat de footer altijd onderaan het scherm staat, ook als de
+   inhoud korter is dan de viewport. */
+.page-404 {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.notfound {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-top: var(--nav-h);
+}
+.notfound .cta { width: 100%; }
+.notfound__code {
+  font-family: var(--serif);
+  font-weight: 300;
+  font-size: clamp(8rem, 28vw, 22rem);
+  line-height: 0.85;
+  letter-spacing: -0.02em;
+  color: var(--ink);
+  margin-bottom: clamp(1rem, 3vw, 2rem);
+}
+
+/* =============================================================================
    UNDERSTATED PAGE HEADER (portfolio / category)
    ========================================================================== */
 .page-head {
