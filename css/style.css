@@ -288,7 +288,7 @@ ul { list-style: none; }
 .work__head {
   display: flex;
   flex-direction: column;
-  margin-bottom: clamp(4rem, 8vw, 7rem);
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
 .work__title {
   font-family: var(--serif);
