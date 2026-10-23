@@ -20,6 +20,9 @@ const API_VER    = '2023-05-03';
 
 const SANITY_LIVE = true;
 
+// Foto-document dat als hero (grote foto bovenaan de homepage) getoond wordt.
+const HERO_FOTO_ID = 'foto-architectuur-1009';
+
 const SANITY_READY = SANITY_LIVE && PROJECT_ID && PROJECT_ID !== 'YOUR_PROJECT_ID';
 
 async function sanityFetch(query) {
@@ -199,7 +202,9 @@ const DataAPI = {
 
   async heroImage() {
     if (!SANITY_READY) return window.JPJ_DATA.heroImage;
-    const res = await sanityFetch(QUERIES.featuredPhotos);
+    // Vaste hero-foto (architectuur/1009); valt terug op de eerste uitgelichte foto.
+    const pinned = await sanityFetch(`*[_id == "${HERO_FOTO_ID}"][0]{ afbeelding, altTekst }`);
+    const res = pinned ? [pinned] : await sanityFetch(QUERIES.featuredPhotos);
     const first = (res || [])[0];
     if (!first) return window.JPJ_DATA.heroImage;
     return {
