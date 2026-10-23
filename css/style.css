@@ -472,8 +472,10 @@ ul { list-style: none; }
   line-height: 0.85;
   letter-spacing: -0.02em;
   color: var(--ink);
-  margin-bottom: clamp(1rem, 3vw, 2rem);
+  /* Ruim genoeg zodat de onderstokken van de 4 niet tegen het label komen. */
+  margin-bottom: clamp(2rem, 4vw, 3.5rem);
 }
+.notfound .eyebrow { margin-bottom: clamp(1rem, 2vw, 1.75rem); }
 
 /* =============================================================================
    UNDERSTATED PAGE HEADER (portfolio / category)
