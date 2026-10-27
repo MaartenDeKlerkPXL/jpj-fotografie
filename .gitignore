@@ -9,6 +9,7 @@ Thumbs.db
 # Sanity Studio (geïnstalleerd met npm install, niet nodig in de repo)
 sanity/node_modules/
 sanity/dist/
+sanity/.sanity/
 
 # Lokale env/geheimen (mocht dat later gebruikt worden)
 .env

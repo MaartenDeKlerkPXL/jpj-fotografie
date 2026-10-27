@@ -21,7 +21,7 @@ export default {
       name: 'email',
       title: 'E-mailadres',
       type: 'string',
-      description: 'Contact loopt uitsluitend via e-mail — er is bewust geen telefoonveld.'
+      description: 'Het e-mailadres waarop bezoekers je kunnen bereiken.'
     },
     {
       name: 'regio',

@@ -22,11 +22,8 @@ export default {
       title: 'Omslagfoto (voor het overzicht)',
       type: 'image',
       options: { hotspot: true },
-      description: 'Foto die op de overzichtspagina wordt getoond bij deze categorie. ' +
-        'NB: zolang Sanity nog niet live is, komen deze covers uit js/data.js (object "covers"). ' +
-        'Stel zodra het CMS live gaat dezelfde keuzes hier in als coverFoto, bijv.: ' +
-        'Zakelijk → architectuur/1009.jpg, Bruiloften → bruiloften/0323-scaled.jpeg, ' +
-        'Sport & Events → sport/Kart-in-actie.jpg.'
+      description: 'De foto die op de portfoliopagina bij deze categorie staat. ' +
+        'Alleen nodig bij de zes hoofdcategorieën, bij een subcategorie wordt hij niet getoond.'
     },
     {
       name: 'parentCategorie',

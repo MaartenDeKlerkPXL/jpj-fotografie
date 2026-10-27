@@ -9,7 +9,7 @@ export default {
       title: 'Jouw foto (groot formaat)',
       type: 'image',
       options: { hotspot: true },
-      description: 'Staand of vierkant formaat werkt het beste — minimaal 1400px.'
+      description: 'Een staande of vierkante foto werkt het best, minimaal 1400 pixels breed.'
     },
     {
       name: 'naam',

@@ -41,7 +41,7 @@ export default {
       name: 'datum',
       title: 'Datum fotosessie',
       type: 'date',
-      description: 'Optioneel — alleen voor eigen administratie.'
+      description: 'Mag leeg blijven. Alleen voor je eigen administratie, het staat niet op de site.'
     }
   ],
   orderings: [
