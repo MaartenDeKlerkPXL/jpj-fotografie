@@ -81,8 +81,15 @@
     if (!form || !btn) return;
 
     if (EMAILJS_READY && window.emailjs) {
-      try { emailjs.init({ publicKey: EMAILJS_PUBLIC_KEY }); } catch (e) {}
+      try {
+        emailjs.init({
+          publicKey: EMAILJS_PUBLIC_KEY,
+          blockHeadless: true,                          // weigert headless browsers (bots)
+          limitRate: { id: 'contact', throttle: 30000 } // max 1 bericht per 30 s per bezoeker
+        });
+      } catch (e) {}
     }
+    const loadedAt = Date.now();
 
     // realtime: wis foutmelding bij invoer
     form.querySelectorAll('input, select, textarea').forEach(function (f) {
@@ -92,6 +99,9 @@
     form.addEventListener('submit', async function (e) {
       e.preventDefault();
       if (!validate(form)) return;
+
+      // Bot: honeypot ingevuld of binnen 3 s verstuurd. Doe alsof het gelukt is, verstuur niets.
+      const isBot = form.elements['website'].value !== '' || Date.now() - loadedAt < 3000;
 
       const original = btn.innerHTML;
       btn.disabled = true;
@@ -108,7 +118,9 @@
       };
 
       try {
-        if (EMAILJS_READY && window.emailjs) {
+        if (isBot) {
+          await new Promise(function (r) { setTimeout(r, 700); });
+        } else if (EMAILJS_READY && window.emailjs) {
           await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
         } else {
           // Demo-modus: geen EmailJS-sleutels ingevuld → simuleer succes

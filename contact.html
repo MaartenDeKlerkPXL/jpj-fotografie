@@ -131,6 +131,11 @@
             <span class="field-error" data-error-for="bericht"></span>
           </div>
 
+          <!-- Honeypot: onzichtbaar voor mensen, bots vullen het in -->
+          <div class="sr-only" aria-hidden="true">
+            <label>Website <input type="text" name="website" tabindex="-1" autocomplete="off"></label>
+          </div>
+
           <button type="submit" class="btn-submit" id="submitBtn">Verzenden <span class="arrow">→</span></button>
         </form>
       </div>
